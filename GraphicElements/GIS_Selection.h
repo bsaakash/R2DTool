@@ -1,5 +1,5 @@
-#ifndef GISHazardInputWidget_H
-#define GISHazardInputWidget_H
+#ifndef GIS_Selection_H
+#define GIS_Selection_H
 /* *****************************************************************************
 Copyright (c) 2016-2021, The Regents of the University of California (Regents).
 All rights reserved.
@@ -36,80 +36,66 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 *************************************************************************** */
 
-// Written by: Stevan Gavrilovic
+// Written by: fmk using cut & paste of existing code created by Stevan Gavrilovic
+
+
 
 #include "SimCenterAppWidget.h"
+class PlainRectangle;
 
-#include <qgscoordinatereferencesystem.h>
-
-#include <memory>
-
-#include <QMap>
-
-class VisualizationWidget;
+class SimCenterMapcanvasWidget;
 class QGISVisualizationWidget;
-class QgsVectorDataProvider;
-class QgsProjectionSelectionWidget;
-class QgsVectorLayer;
-class SimCenterUnitsWidget;
-class SimCenterIMWidget;
-class CRSSelectionWidget;
+class VisualizationWidget;
 
-class QLineEdit;
+class QgsMapLayer;
+class QgsVectorLayer;
+class QgsLayerTreeGroup;
+
+class QStackedWidget;
 class QProgressBar;
 class QLabel;
-class QComboBox;
-class QGridLayout;
+class QLineEdit;
 
-class GISHazardInputWidget : public SimCenterAppWidget
+class GIS_Selection : public SimCenterAppWidget
 {
     Q_OBJECT
 
 public:
-    GISHazardInputWidget(VisualizationWidget* visWidget, QWidget *parent = nullptr);
-    ~GISHazardInputWidget();
+  GIS_Selection(VisualizationWidget* visWidget, QWidget *parent = nullptr);
+  ~GIS_Selection();
+  QVector<double> getSelectedPoints(void);
+		  
+public slots:
+  
+  void clear(void);
+  void handleSelectionGeometryChange();
+  
+signals:
+  void selectionGeometryChanged();
 
-    QWidget* getGISHazardInputWidget(void);
+protected:
 
-    bool inputFromJSON(QJsonObject &jsonObject);
-    bool outputToJSON(QJsonObject &jsonObj);
-    bool inputAppDataFromJSON(QJsonObject &jsonObj);
-    bool outputAppDataToJSON(QJsonObject &jsonObj);
-    bool copyFiles(QString &destDir);
-    void clear(void);
+  void showEvent(QShowEvent *e);
 
 private slots:
-    void chooseEventFileDialog(void);
-    void handleLayerCrsChanged(const QgsCoordinateReferenceSystem & val);
+    void clearSelection(void);
 
-signals:
-    void outputDirectoryPathChanged(QString motionDir, QString eventFile);
-    void eventTypeChangedSignal(QString eventType);
-    void loadingComplete(const bool value);
+  void handleRectangleSelect(void);
+  //  void handlePolygonSelect(void);
+  //  void handleRadiusSelect(void);
+  //  void handleFreehandSelect(void);
+  //  void handleNoneSelect(void);
+
+    void handleSelectionDone(void);
 
 private:
+  std::unique_ptr<SimCenterMapcanvasWidget> mapViewSubWidget;
+  QGISVisualizationWidget* theVisualizationWidget = nullptr;
 
-    int loadGISFile(void);
+  PlainRectangle *userGrid = 0;
 
-    QGISVisualizationWidget* theVisualizationWidget = nullptr;
-
-    QStringList attributeNames;
-
-    QString GISFilePath;
-    QLineEdit* GISPathLineEdit = nullptr;
-
-    QWidget* fileInputWidget = nullptr;
-
-    QgsVectorDataProvider* dataProvider = nullptr;
-    QgsVectorLayer* vectorLayer = nullptr;
-
-    // SimCenterUnitsWidget* unitsWidget = nullptr;
-    SimCenterIMWidget* theIMs = nullptr;
-
-    CRSSelectionWidget* crsSelectorWidget = nullptr;
-    QComboBox* eventTypeCombo = nullptr;
-
-
+  QVector<double> selectedPoints;
 };
 
-#endif // GISHazardInputWidget_H
+
+#endif // GIS_Selection_H

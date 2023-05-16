@@ -145,6 +145,7 @@ SOURCES +=  $$PWD/Events/UI/EarthquakeRuptureForecast.cpp \
             $$PWD/UIWidgets/OpenSeesPyBuildingModel.cpp \
             $$PWD/UIWidgets/WaterNetworkPerformanceModel.cpp \
             $$PWD/UIWidgets/PelicunDLWidget.cpp \
+            $$PWD/UIWidgets/Pelicun3DLWidget.cpp \	    
             $$PWD/UIWidgets/PerformanceWidget.cpp \
             $$PWD/UIWidgets/ResultsWidget.cpp \
             $$PWD/UIWidgets/SecondaryComponentSelection.cpp \
@@ -158,10 +159,14 @@ SOURCES +=  $$PWD/Events/UI/EarthquakeRuptureForecast.cpp \
             $$PWD/UIWidgets/HurricaneSelectionWidget.cpp \
             $$PWD/UIWidgets/OpenQuakeSelectionWidget.cpp \
             $$PWD/UIWidgets/BrailsInventoryGenerator.cpp \
+            $$PWD/UIWidgets/BrailsGoogleDialog.cpp \	    
             $$PWD/UIWidgets/UserInputHurricaneWidget.cpp \
             $$PWD/GraphicElements/NodeHandle.cpp \
             $$PWD/GraphicElements/RectangleGrid.cpp \
+            $$PWD/GraphicElements/PlainRectangle.cpp \	    
             $$PWD/GraphicElements/GridNode.cpp \
+            $$PWD/GraphicElements/GIS_Selection.cpp \
+            $$PWD/GraphicElements/GIS_SelectionTool.cpp \	    	    
             $$PWD/RunWidget.cpp \
             $$PWD/WorkflowAppR2D.cpp \
 
@@ -260,6 +265,7 @@ HEADERS +=  $$PWD/Events/UI/EarthquakeRuptureForecast.h \
             $$PWD/UIWidgets/OpenSeesPyBuildingModel.h \
             $$PWD/UIWidgets/WaterNetworkPerformanceModel.h \
             $$PWD/UIWidgets/PelicunDLWidget.h \
+            $$PWD/UIWidgets/Pelicun3DLWidget.h \	    
             $$PWD/UIWidgets/PerformanceWidget.h \
             $$PWD/UIWidgets/ResultsWidget.h \
             $$PWD/UIWidgets/SecondaryComponentSelection.h \
@@ -273,6 +279,7 @@ HEADERS +=  $$PWD/Events/UI/EarthquakeRuptureForecast.h \
             $$PWD/UIWidgets/HurricaneSelectionWidget.h \
             $$PWD/UIWidgets/OpenQuakeSelectionWidget.h \
             $$PWD/UIWidgets/BrailsInventoryGenerator.h \
+            $$PWD/UIWidgets/BrailsGoogleDialog.h \	    
             $$PWD/UIWidgets/UserInputHurricaneWidget.h \
             $$PWD/UIWidgets/HurricaneObject.h \
             $$PWD/ModelViewItems/CustomListWidget.h \
@@ -282,6 +289,9 @@ HEADERS +=  $$PWD/Events/UI/EarthquakeRuptureForecast.h \
             $$PWD/GraphicElements/GridNode.h \
             $$PWD/GraphicElements/NodeHandle.h \
             $$PWD/GraphicElements/RectangleGrid.h \
+            $$PWD/GraphicElements/PlainRectangle.h \	    
+            $$PWD/GraphicElements/GIS_Selection.h \
+            $$PWD/GraphicElements/GIS_SelectionTool.h \	    	    	    
             $$PWD/WorkflowAppR2D.h \
             $$PWD/RunWidget.h \
 

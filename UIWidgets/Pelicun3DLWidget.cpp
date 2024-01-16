@@ -62,7 +62,8 @@ Pelicun3DLWidget::Pelicun3DLWidget(QWidget *parent): SimCenterAppWidget(parent)
 
     QLabel* typeLabel = new QLabel(tr("Damage and Loss Method:"),this);
     DLTypeComboBox = new QComboBox(this);
-    DLTypeComboBox->addItem("HAZUS MH EQ");
+    DLTypeComboBox->addItem("HAZUS MH EQ Story");
+
     DLTypeComboBox->addItem("HAZUS MH EQ IM");
     DLTypeComboBox->addItem("HAZUS MH HU");
     DLTypeComboBox->addItem("User-provided Fragilities");
@@ -134,13 +135,15 @@ Pelicun3DLWidget::Pelicun3DLWidget(QWidget *parent): SimCenterAppWidget(parent)
 
     autoPopulateScriptWidget->hide();
     fragDirWidget->hide();
+
+    resultWidget = new Pelicun3PostProcessor(parent);
 }
 
 
 bool Pelicun3DLWidget::outputAppDataToJSON(QJsonObject &jsonObject)
 {
 
-    jsonObject.insert("Application","pelicun");
+    jsonObject.insert("Application","Pelicun3");
 
     QJsonObject appDataObj;
 
@@ -151,7 +154,13 @@ bool Pelicun3DLWidget::outputAppDataToJSON(QJsonObject &jsonObject)
     appDataObj.insert("coupled_EDP",coupledEDPCheckBox->isChecked());
     appDataObj.insert("event_time",eventTimeComboBox->currentText());
     appDataObj.insert("ground_failure",groundFailureCheckBox->isChecked());
-
+    appDataObj.insert("regional", "true");
+    if (DLTypeComboBox->currentText().compare("HAZUS MH EQ IM")==0){
+        appDataObj.insert("auto_script", "PelicunDefault/Hazus_Earthquake_IM.py");
+    }
+    if (DLTypeComboBox->currentText().compare("HAZUS MH EQ Story")==0){
+        appDataObj.insert("auto_script", "PelicunDefault/Hazus_Earthquake_Story.py");
+    }
     // test separating the path and filename of auto-population codes (KZ)
     QFileInfo test_auto(autoPopulationScriptLineEdit->text());
     if(test_auto.exists())
@@ -263,11 +272,14 @@ bool Pelicun3DLWidget::inputAppDataFromJSON(QJsonObject &jsonObject)
                     // adam .. adam .. adam
                     pathToComponentInfoFile = currPath + QDir::separator()
                             + "input_data" + QDir::separator() + pathToScript;
-
-                    if (fileInfo.exists(pathToComponentInfoFile))
-                        autoPopulationScriptLineEdit->setText(pathToComponentInfoFile);
-                    else
+                    if (pathToScript.startsWith("PelicunDefault")){
+                        // Do nothing, the rwhale knows where to find PelicunDefault dir
+                    }
+                    else if (fileInfo.exists(pathToComponentInfoFile))
+                        autoPopulationScriptLineEdit->setText(pathToComponentInfoFile); 
+                    else{
                         this->infoMessage("Warning: the script file "+pathToScript+ " does not exist");
+                    }
                 }
             }
         }
@@ -322,6 +334,18 @@ bool Pelicun3DLWidget::inputAppDataFromJSON(QJsonObject &jsonObject)
 void Pelicun3DLWidget::clear(void)
 {
     DLTypeComboBox->setCurrentIndex(0);
+    realizationsLineEdit->clear();
+    eventTimeComboBox->setCurrentIndex(1);
+    detailedResultsCheckBox->setChecked(false);
+    logFileCheckBox->setChecked(false);
+    coupledEDPCheckBox->setChecked(false);
+    groundFailureCheckBox->setChecked(false);
+    autoPopulationScriptLineEdit->clear();
+    fragilityDirLineEdit->clear();
+}
+
+void Pelicun3DLWidget::clearParams(void)
+{
     realizationsLineEdit->clear();
     eventTimeComboBox->setCurrentIndex(1);
     detailedResultsCheckBox->setChecked(false);
@@ -396,8 +420,9 @@ bool Pelicun3DLWidget::copyFiles(QString &destName)
 
 void Pelicun3DLWidget::handleComboBoxChanged(const QString &text)
 {
+    this->clearParams();
 
-    if(text.compare("HAZUS MH EQ") == 0 || text.compare("HAZUS MH EQ IM") == 0)
+    if(text.compare("HAZUS MH EQ Story") == 0 || text.compare("HAZUS MH EQ IM") == 0)
     {
         groundFailureCheckBox->show();
         autoPopulateScriptWidget->hide();
@@ -478,4 +503,14 @@ void Pelicun3DLWidget::handleBrowseButton2Pressed(void)
         return;
 
     fragilityDirLineEdit->setText(fragFolder);
+}
+
+//QMainWindow* Pelicun3DLWidget::getPostProcessor(QWidget *parent, SimCenterAppWidget* visWidget){
+//    VisualizationWidget* visWidgetDownCast = dynamic_cast<VisualizationWidget>
+//    QMainWindow* returnPtr = dynamic_cast<QMainWindow*> (new Pelicun3PostProcessor());
+//    return returnPtr;
+//};
+SC_ResultsWidget* Pelicun3DLWidget::getResultsWidget(QWidget* parent){
+    resultWidget->setParent(parent);
+    return resultWidget;
 }

@@ -49,9 +49,26 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 #include <QFileInfo>
 #include <QDir>
+#include <QScreen>
 
 QGISSiteInputWidget::QGISSiteInputWidget(QWidget *parent, VisualizationWidget* visWidget, QString componentType, QString appType) : AssetInputWidget(parent, visWidget, componentType, appType)
 {
+    label1->setText("Site File: (.csv)");
+    label2->setText("Sites to Analyze");
+//    mainWidgetLayout->removeWidget(label2);
+//    mainWidgetLayout->removeWidget(selectComponentsLineEdit);
+//    mainWidgetLayout->removeWidget(filterExpressionButton);
+//    mainWidgetLayout->removeWidget(clearSelectionButton);
+//    mainWidgetLayout->removeWidget(componentTableWidget);
+//    QLayoutItem *child;
+//    while ((child = mainWidgetLayout->takeAt(3)) != nullptr) {
+//        child->widget()->hide(); // delete the widget
+//    }
+    QPushButton *showSiteTableButton = new QPushButton();
+    showSiteTableButton->setText(tr("Show Site File (.csv) Table"));
+//    showSiteTableButton->setMaximumWidth(150);
+    mainWidgetLayout->addWidget(showSiteTableButton,3, 0, 1,4);
+    connect(showSiteTableButton,SIGNAL(clicked()),this,SLOT(showSiteTableWindow()));
 
 }
 
@@ -92,6 +109,11 @@ int QGISSiteInputWidget::loadAssetVisualization()
 //    auto indexDepthToRock = headers.indexOf("DepthToRock");
     auto indexModelType = headers.indexOf("Model");
 
+    if(indexLongitude == -1 || indexLatitude == -1)
+    {
+        indexLatitude = headers.indexOf("lat");
+        indexLongitude = headers.indexOf("lon");
+    }
     if(indexLongitude == -1 || indexLatitude == -1)
     {
         this->errorMessage("Could not find latitude and longitude in the header columns");
@@ -312,10 +334,21 @@ int QGISSiteInputWidget::loadAssetVisualization()
     // check soil data
     if (assetType.compare("Soil")==0)
         this->checkSoilDataComplete();
-
+    //JZ
+    componentTableWidget->hide();
     return 0;
 }
 
+void QGISSiteInputWidget::showSiteTableWindow(){
+    if (componentTableView == nullptr){
+        componentTableView = new ComponentTableView(this);
+    //    QAbstractItemModel* tableModel = componentTableWidget->getTableModel();
+        componentTableView->setComponenetTableModel(componentTableWidget->getTableModel());
+        componentTableView->setWindowFlag(Qt::Window);
+        componentTableView->move(screen()->geometry().center() - frameGeometry().center());
+    }
+    componentTableView->show();
+}
 
 void QGISSiteInputWidget::reloadComponentData(QString newDataFile)
 {

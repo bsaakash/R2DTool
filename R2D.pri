@@ -46,16 +46,33 @@ INCLUDEPATH += $$PWD \
                $$PWD/GraphicElements \
                $$PWD/Events/UI \
                $$PWD/Tools \
+               $$PWD/assetWidgets \
+               $$PWD/systemPerformanceWidgets \	       
+               $$PWD/assetWidgets/EPANET2.2/include \
+	       $$PWD/assetWidgets/EPANET2.2/src \
+	       $$PWD/dlWidgets
 
-
-SOURCES +=  $$PWD/Events/UI/EarthquakeRuptureForecast.cpp \
-            $$PWD/Events/UI/BedrockDepth.cpp \
+SOURCES +=  $$PWD/Events/UI/BedrockDepth.cpp \
             $$PWD/Events/UI/BedrockDepthWidget.cpp \
-            $$PWD/Events/UI/EarthquakeRuptureForecastWidget.cpp \
+    $$PWD/Events/UI/GroundFailureWidget.cpp \
+    $$PWD/Events/UI/LiqLateralHazus2020.cpp \
+    $$PWD/Events/UI/LiqTriggerHazus2020.cpp \
+    $$PWD/Events/UI/LiqVerticalHazus2020.cpp \
+    $$PWD/Events/UI/LiquefactionWidget.cpp \
+            $$PWD/Events/UI/UCERF2Widget.cpp \
+            $$PWD/Events/UI/HazardConsistentScenarioWidget.cpp \
+            $$PWD/Events/UI/ConventionalScenarioWidget.cpp \
+            $$PWD/Events/UI/SpecificScenarioWidget.cpp \
+            $$PWD/Events/UI/MeanUCERFWidget.cpp \
+            $$PWD/Events/UI/MeanUCERFFM3Widget.cpp \
+            $$PWD/Events/UI/MeanUCERFPoissonWidget.cpp \
+            $$PWD/Events/UI/HazardCurveInputWidget.cpp \
             $$PWD/Events/UI/EventGMDirWidget.cpp \
             $$PWD/Events/UI/GMPE.cpp \
             $$PWD/Events/UI/GMPEWidget.cpp \
             $$PWD/Events/UI/GMWidget.cpp \
+            $$PWD/Events/UI/ScenarioSelectionWidget.cpp \
+            $$PWD/Events/UI/GroundMotionModelsWidget.cpp \
             $$PWD/Events/UI/GmAppConfig.cpp \
             $$PWD/Events/UI/GmAppConfigWidget.cpp \
             $$PWD/Events/UI/GmCommon.cpp \
@@ -80,6 +97,8 @@ SOURCES +=  $$PWD/Events/UI/EarthquakeRuptureForecast.cpp \
             $$PWD/Events/UI/RecordSelectionWidget.cpp \
             $$PWD/Events/UI/RuptureLocation.cpp \
             $$PWD/Events/UI/RuptureWidget.cpp \
+            $$PWD/Events/UI/NSHMCurveWidget.cpp \
+            $$PWD/Events/UI/UserDefinedCurveWidget.cpp \
             $$PWD/Events/UI/Site.cpp \
             $$PWD/Events/UI/SiteConfig.cpp \
             $$PWD/Events/UI/SiteConfigWidget.cpp \
@@ -88,11 +107,16 @@ SOURCES +=  $$PWD/Events/UI/EarthquakeRuptureForecast.cpp \
             $$PWD/Events/UI/SiteScatter.cpp \
             $$PWD/Events/UI/SiteScatterWidget.cpp \
             $$PWD/Events/UI/SiteWidget.cpp \
+            $$PWD/Events/UI/GMSiteWidget.cpp \
+            $$PWD/Events/UI/GMERFWidget.cpp \
             $$PWD/Events/UI/SoilModel.cpp \
             $$PWD/Events/UI/SoilModelWidget.cpp \
             $$PWD/Events/UI/SpatialCorrelationWidget.cpp \
             $$PWD/Events/UI/Vs30.cpp \
             $$PWD/Events/UI/Vs30Widget.cpp \
+    $$PWD/Events/UI/LiqTriggerZhuEtAl2017.cpp \
+            $$PWD/Events/UI/zDepthWidget.cpp \
+            $$PWD/Events/UI/zDepthUserInputWidget.cpp \
             $$PWD/ModelViewItems/ComponentTableModel.cpp \
             $$PWD/ModelViewItems/ComponentTableView.cpp \
             $$PWD/ModelViewItems/ListTreeModel.cpp \
@@ -104,7 +128,7 @@ SOURCES +=  $$PWD/Events/UI/EarthquakeRuptureForecast.cpp \
             $$PWD/Tools/GeoJSONReaderWriter.cpp \
             $$PWD/Tools/ComponentDatabaseManager.cpp \
             $$PWD/Tools/NGAW2Converter.cpp \
-    $$PWD/Tools/Pelicun3PostProcessor.cpp \
+            $$PWD/Tools/Pelicun3PostProcessor.cpp \
             $$PWD/Tools/PelicunPostProcessor.cpp \
             $$PWD/Tools/CBCitiesPostProcessor.cpp \
             $$PWD/Tools/REmpiricalProbabilityDistribution.cpp \
@@ -172,13 +196,50 @@ SOURCES +=  $$PWD/Events/UI/EarthquakeRuptureForecast.cpp \
             $$PWD/GraphicElements/PlainRectangle.cpp \	    
             $$PWD/GraphicElements/GridNode.cpp \
             $$PWD/GraphicElements/GIS_Selection.cpp \
-            $$PWD/RunWidget.cpp \
+	    $$PWD/RunWidget.cpp \
             $$PWD/WorkflowAppR2D.cpp \
+            $$PWD/systemPerformanceWidgets/SystemPerformanceWidget.cpp \
+            $$PWD/systemPerformanceWidgets/RewetRecovery.cpp \
+            $$PWD/assetWidgets/InpFileWaterInputWidget.cpp \
+	    $$PWD/assetWidgets/EPANET2.2/geoJSON.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/inpfile.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/qualreact.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/genmmd.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/hydcoeffs.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/input1.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/output.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/qualroute.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/epanet.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/epanet2.c \	    
+	    $$PWD/assetWidgets/EPANET2.2/src/hydraul.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/input2.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/outputJSON.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/report.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/hydsolver.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/input3.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/project.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/rules.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/hash.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/hydstatus.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/mempool.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/quality.c \
+	    $$PWD/assetWidgets/EPANET2.2/src/smatrix.c
 
-HEADERS +=  $$PWD/Events/UI/EarthquakeRuptureForecast.h \
-            $$PWD/Events/UI/BedrockDepth.h \
+HEADERS +=  $$PWD/Events/UI/BedrockDepth.h \
             $$PWD/Events/UI/BedrockDepthWidget.h \
-            $$PWD/Events/UI/EarthquakeRuptureForecastWidget.h \
+    $$PWD/Events/UI/GroundFailureWidget.h \
+    $$PWD/Events/UI/LiqLateralHazus2020.h \
+    $$PWD/Events/UI/LiqTriggerHazus2020.h \
+    $$PWD/Events/UI/LiqVerticalHazus2020.h \
+    $$PWD/Events/UI/LiquefactionWidget.h \
+            $$PWD/Events/UI/UCERF2Widget.h \
+            $$PWD/Events/UI/HazardConsistentScenarioWidget.h \
+            $$PWD/Events/UI/ConventionalScenarioWidget.h \
+            $$PWD/Events/UI/SpecificScenarioWidget.h \
+            $$PWD/Events/UI/MeanUCERFWidget.h \
+            $$PWD/Events/UI/MeanUCERFFM3Widget.h \
+            $$PWD/Events/UI/MeanUCERFPoissonWidget.h \
+            $$PWD/Events/UI/HazardCurveInputWidget.h \
             $$PWD/Events/UI/EventGMDirWidget.h \
             $$PWD/Events/UI/GMPE.h \
             $$PWD/Events/UI/GMPEWidget.h \
@@ -207,6 +268,8 @@ HEADERS +=  $$PWD/Events/UI/EarthquakeRuptureForecast.h \
             $$PWD/Events/UI/RecordSelectionWidget.h \
             $$PWD/Events/UI/RuptureLocation.h \
             $$PWD/Events/UI/RuptureWidget.h \
+            $$PWD/Events/UI/NSHMCurveWidget.h \
+            $$PWD/Events/UI/UserDefinedCurveWidget.h \
             $$PWD/Events/UI/Site.h \
             $$PWD/Events/UI/SiteConfig.h \
             $$PWD/Events/UI/SiteConfigWidget.h \
@@ -215,11 +278,16 @@ HEADERS +=  $$PWD/Events/UI/EarthquakeRuptureForecast.h \
             $$PWD/Events/UI/SiteScatter.h \
             $$PWD/Events/UI/SiteScatterWidget.h \
             $$PWD/Events/UI/SiteWidget.h \
+            $$PWD/Events/UI/GMSiteWidget.h \
+            $$PWD/Events/UI/GMERFWidget.h \
             $$PWD/Events/UI/SoilModel.h \
             $$PWD/Events/UI/SoilModelWidget.h \
             $$PWD/Events/UI/SpatialCorrelationWidget.h \
             $$PWD/Events/UI/Vs30.h \
             $$PWD/Events/UI/Vs30Widget.h \
+    $$PWD/Events/UI/LiqTriggerZhuEtAl2017.h \
+            $$PWD/Events/UI/zDepthWidget.h \
+            $$PWD/Events/UI/zDepthUserInputWidget.h \
             $$PWD/Tools/AssetInputDelegate.h \
             $$PWD/Tools/AssetFilterDelegate.h \
             $$PWD/Tools/ComponentDatabase.h \
@@ -285,6 +353,8 @@ HEADERS +=  $$PWD/Events/UI/EarthquakeRuptureForecast.h \
             $$PWD/UIWidgets/UQWidget.h \
             $$PWD/UIWidgets/UserDefinedEDPR.h \
             $$PWD/UIWidgets/UserInputGMWidget.h \
+            $$PWD/Events/UI/ScenarioSelectionWidget.h \
+            $$PWD/Events/UI/GroundMotionModelsWidget.h \
             $$PWD/UIWidgets/RegionalSiteResponseWidget.h \
             $$PWD/UIWidgets/HurricaneSelectionWidget.h \
             $$PWD/UIWidgets/OpenQuakeSelectionWidget.h \
@@ -304,7 +374,19 @@ HEADERS +=  $$PWD/Events/UI/EarthquakeRuptureForecast.h \
             $$PWD/GraphicElements/GIS_Selection.h \
             $$PWD/WorkflowAppR2D.h \
             $$PWD/RunWidget.h \
-
+            $$PWD/systemPerformanceWidgets/SystemPerformanceWidget.h \	    	    
+            $$PWD/systemPerformanceWidgets/RewetRecovery.h \
+            $$PWD/assetWidgets/InpFileWaterInputWidget.h \	    
+	    $$PWD/assetWidgets/EPANET2.2/include/epanet2.h \
+	    $$PWD/assetWidgets/EPANET2.2/include/epanet2_2.h \
+	    $$PWD/assetWidgets/EPANET2.2/include/epanet2_enums.h \
+	    $$PWD/assetWidgets/EPANET2.2/src/enumstxt.h \
+	    $$PWD/assetWidgets/EPANET2.2/src/funcs.h \
+	    $$PWD/assetWidgets/EPANET2.2/src/hash.h \
+	    $$PWD/assetWidgets/EPANET2.2/src/text.h \
+	    $$PWD/assetWidgets/EPANET2.2/src/types.h \
+	    $$PWD/assetWidgets/EPANET2.2/src/version.h \
+	    $$PWD/assetWidgets/EPANET2.2/src/mempool.h 
 
 #contains(DEFINES, ARC_GIS)  {
 

@@ -1,5 +1,6 @@
-#ifndef EarthquakeRuptureForecastWidget_H
-#define EarthquakeRuptureForecastWidget_H
+#ifndef LiqVerticalHazus2020_H
+#define LiqVerticalHazus2020_H
+
 /* *****************************************************************************
 Copyright (c) 2016-2021, The Regents of the University of California (Regents).
 All rights reserved.
@@ -36,46 +37,45 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 *************************************************************************** */
 
-// Written by: Stevan Gavrilovic
+// Written by: Jinyan Zhao
 
-#include <QWidget>
+#include "SimCenterAppWidget.h"
+#include "SC_DoubleLineEdit.h"
 
-class EarthquakeRuptureForecast;
 
 class QComboBox;
 class QLineEdit;
-class QDoubleSpinBox;
+class QPushButton;
+class CRSSelectionWidget;
+class QSignalMapper;
+class QLabel;
+class QGroupBox;
+class QCheckBox;
 
-class EarthquakeRuptureForecastWidget : public QWidget
+class LiqVerticalHazus2020 : public SimCenterAppWidget
 {
     Q_OBJECT
 
 public:
-    explicit EarthquakeRuptureForecastWidget(QWidget *parent = nullptr);
-
-    EarthquakeRuptureForecast* getRuptureSource() const;
-    // KZ: adding getNumScen to return number of scenarios
-    QString getNumScen() const;
+    explicit LiqVerticalHazus2020(QWidget *parent = nullptr);
+    bool outputToJSON(QJsonObject &jsonObject);
 
 signals:
 
 public slots:
+    void setDefaultFilePath();
 
 private:
-    EarthquakeRuptureForecast* m_eqRupture;
-    QComboBox* ModelTypeCombo;
-    QLineEdit* EQNameLineEdit;
-    QDoubleSpinBox* m_magnitudeMinBox;
-    QDoubleSpinBox* m_magnitudeMaxBox;
-    QDoubleSpinBox* m_maxDistanceBox;
+    QLabel* messageLabel;
 
-    // number of scenarios
-    QLineEdit* NumScenarioLineEdit;
-    // sampling methods
-    QComboBox* SamplingMethodCombo;
+    QPushButton* resetToDefaultButton;
 
-    void setupConnections();
+    QGroupBox* outputSaveGroupBox = nullptr;
+
+    QMap<QString, QCheckBox*> outputSaveCheckBoxes;
+
+
 
 };
 
-#endif // EarthquakeRuptureForecastWidget_H
+#endif // LiqVerticalHazus2020_H

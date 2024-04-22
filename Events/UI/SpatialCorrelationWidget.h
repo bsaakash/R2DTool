@@ -38,39 +38,45 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 // Written by: Stevan Gavrilovic, Frank McKenna
 
-#include "IntensityMeasure.h"
+#include "SimCenterAppWidget.h"
+#include <QLabel>
 
-#include <QWidget>
-
-class QComboBox;
-class QCheckBox;
+class SC_ComboBox;
 class QLineEdit;
-class QLabel;
 
-class SpatialCorrelationWidget : public QWidget
+class SpatialCorrelationWidget : public SimCenterAppWidget
 {
     Q_OBJECT
 public:
-    explicit SpatialCorrelationWidget(QWidget *parent = nullptr);
+    explicit SpatialCorrelationWidget(QStringList* selectedIMTypes, QWidget *parent = nullptr);
 
-    QJsonObject getJsonCorr();
-
-    QJsonObject getJsonScaling();
+    bool outputToJSON(QJsonObject& obj);
+    bool inputFromJSON(QJsonObject& obj);
 
 signals:
 
 public slots:
-    void handleAvailableModel(const QString sourceType);
+//    void handleAvailableModel(const QString sourceType);
+    void toggleIMselection(QStringList* selectedIMTypes);
 
 private:
-    QComboBox* m_correlationBoxInter;
-    QComboBox* m_correlationBoxIntra;
+    SC_ComboBox* PGAcorrelationBoxInter = nullptr;
+    SC_ComboBox* PGAcorrelationBoxIntra = nullptr;
+    SC_ComboBox* SAcorrelationBoxInter = nullptr;
+    SC_ComboBox* SAcorrelationBoxIntra = nullptr;
+    SC_ComboBox* PGVcorrelationBoxInter = nullptr;
+    SC_ComboBox* PGVcorrelationBoxIntra = nullptr;
 
     QLabel* spatialCorrelationInterLabel;
     QLabel* spatialCorrelationIntraLabel;
 
-    QLineEdit* maxScalingLineEdit;
-    QLineEdit* minScalingLineEdit;
+    QStringList* _selectedIMTypes;
+    QLabel* PGVtypeLabelInter = new QLabel(tr("PGV:"));
+    QLabel* PGAtypeLabelInter = new QLabel(tr("PGA:"));
+    QLabel* SAtypeLabelInter = new QLabel(tr("SA:"));
+    QLabel* PGVtypeLabelIntra = new QLabel(tr("PGV:"));
+    QLabel* PGAtypeLabelIntra = new QLabel(tr("PGA:"));
+    QLabel* SAtypeLabelIntra = new QLabel(tr("SA:"));
 
 };
 

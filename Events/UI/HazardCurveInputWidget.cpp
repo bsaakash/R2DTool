@@ -1,6 +1,3 @@
-#ifndef EarthquakeRuptureForecast_H
-#define EarthquakeRuptureForecast_H
-
 /* *****************************************************************************
 Copyright (c) 2016-2021, The Regents of the University of California (Regents).
 All rights reserved.
@@ -39,50 +36,41 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 // Written by: Stevan Gavrilovic
 
-#include <QObject>
-#include "JsonSerializable.h"
+#include "HazardCurveInputWidget.h"
+#include "NSHMCurveWidget.h"
+#include "UserDefinedCurveWidget.h"
 
-class EarthquakeRuptureForecast : public QObject, JsonSerializable
+#include <QLabel>
+#include <QJsonObject>
+
+HazardCurveInputWidget::HazardCurveInputWidget(QString jsonKey,QWidget *parent) : SimCenterAppSelection("Hazard Curve Input",jsonKey,parent), jsonKey(jsonKey)
 {
-    Q_OBJECT
+    inferredWIdget = new SimCenterAppWidget();
+    nshmWidget = new NSHMCurveWidget();
+    userDefHaz = new UserDefinedCurveWidget();
 
-public:
-    EarthquakeRuptureForecast(double magMin, double magMax, double maxDist, QString model, QString name, QString samplingMethod, int numScen, QObject *parent = nullptr);
+    this->addComponent("Inferred","NA",inferredWIdget);
+    this->addComponent("National Seismic Hazard Map","NA",nshmWidget);
+    this->addComponent("User-defined","NA",userDefHaz);
 
-    double getMagnitudeMin() const;
-    double getMagnitudeMax() const;
-    double getMaxDistance() const;
-    QString getEQName() const;
-    QString getEQModelType() const;
-    QString getSamplingMethod() const;
-    int getNumScen() const;
+}
 
-    bool outputToJSON(QJsonObject &jsonObject);
-    bool inputFromJSON(QJsonObject &jsonObject);
 
-    void reset(void);
+bool HazardCurveInputWidget::inputFromJSON(QJsonObject& /*obj*/)
+{
+    return true;
+}
 
-signals:
 
-public slots:
-    void setMagnitudeMin(double magnitude);
-    void setMagnitudeMax(double magnitude);
-    void setMaxDistance(double value);
-    void setEQName(const QString &value);
-    void setEQModelType(const QString &value);
-    void setSamplingMethod(const QString &value);
-    void setNumScen(const QString value);
+bool HazardCurveInputWidget::outputToJSON(QJsonObject& obj)
+{
 
-private:
-    double magnitudeMin;
-    double magnitudeMax;
-    double maxDistance;
+    if(this->getCurrentSelection() == inferredWIdget)
+        obj["HazardCurveInput"] = "Inferred_sourceFile";
+    else if(this->getCurrentSelection() == nshmWidget)
+        return nshmWidget->outputToJSON(obj);
+    else if(this->getCurrentSelection() == userDefHaz)
+        return userDefHaz->outputToJSON(obj);
+    return true;
+}
 
-    QString EQModelType;
-    QString EQName;
-    QString SamplingMethod;
-    int NumScen;
-
-};
-
-#endif // EarthquakeRuptureForecast_H

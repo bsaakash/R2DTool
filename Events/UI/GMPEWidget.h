@@ -38,26 +38,43 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 // Written by: Stevan Gavrilovic
 
+#include "SimCenterAppWidget.h"
+#include <QLabel>
+
 #include "GMPE.h"
 
-#include <QWidget>
-#include <QtWidgets>
+class SC_ComboBox;
+class QGroupBox;
 
-class GMPEWidget : public QWidget
+class GMPEWidget : public SimCenterAppWidget
 {
     Q_OBJECT
 public:
-    explicit GMPEWidget(GMPE& gmpe, QWidget *parent = nullptr);
+    explicit GMPEWidget(GMPE& gmpe, QStringList* selectedIMTypes, QWidget *parent = nullptr);
+
+    bool outputToJSON(QJsonObject& obj);
+    bool inputFromJSON(QJsonObject& obj);
 
 signals:
 
 public slots:
     void handleAvailableGMPE(const QString sourceType);
-
+    void toggleIMselection(QStringList* selectedIMTypes);
 private:
     GMPE& m_gmpe;
-    QComboBox* m_typeBox;
-    QGroupBox* gmpeGroupBox;
+
+    SC_ComboBox* PGAtypeBox = nullptr;
+    SC_ComboBox* PGVtypeBox = nullptr;
+    SC_ComboBox* SAtypeBox = nullptr;
+
+    QLabel* PGAtypeLabel = new QLabel(tr("PGA:"));
+    QLabel* SAtypeLabel = new QLabel(tr("SA:"));
+    QLabel* PGVtypeLabel = new QLabel(tr("PGV:"));
+
+    QStringList* _selectedIMTypes;
+
+
+    QGroupBox* gmpeGroupBox = nullptr;
 
     void setupConnections();
 };

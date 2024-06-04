@@ -452,11 +452,6 @@ bool WorkflowAppR2D::outputToJSON(QJsonObject &jsonObjectTop)
     defaultValues["edpFiles"]=edpFiles;
     jsonObjectTop["DefaultValues"]=defaultValues;    
 
-    QJsonObject citations;
-
-    this->createCitation(citations);
-    jsonObjectTop.insert("citations",citations);
-    
     return result;
 }
 
@@ -560,19 +555,13 @@ bool WorkflowAppR2D::inputFromJSON(QJsonObject &jsonObject)
             result = false;
         }
 
-        if (theSystemPerformanceWidget->inputAppDataFromJSON(apps) == false) {
+	if (apps.contains("SystemPerformance")) {
+	  if (theSystemPerformanceWidget->inputAppDataFromJSON(apps) == false) {
             this->errorMessage("REC failed to read input data");
 	    theSystemPerformanceWidget->clear();
             result = false;
-        }	
-
-	/* **************************** Performance *****************************
-	  if (thePerformanceWidget->inputAppDataFromJSON(apps) == false) {
-            this->errorMessage("PRF failed to read input data");
-            thePerformanceWidget->clear();
-            result = false;
-        }
-        *************************************************************************/
+	  }
+	}
 	
     } else {
         this->errorMessage("Error, no Applications field in input file");
@@ -631,16 +620,12 @@ bool WorkflowAppR2D::inputFromJSON(QJsonObject &jsonObject)
       result = false;
     }
 
-    if (theSystemPerformanceWidget->inputFromJSON(jsonObject) == false) {
-      this->errorMessage("DL failed to read app specific data");
-      result = false;
-    }    
-    /* **************************** Performance *****************************	       
-    if (thePerformanceWidget->inputFromJSON(jsonObject) == false) {
-      this->errorMessage("PRF failed to read app specific data");
-      result = false;
+    if (jsonObject.contains("SystemPerformance")) {    
+      if (theSystemPerformanceWidget->inputFromJSON(jsonObject) == false) {
+	this->errorMessage("DL failed to read app specific data");
+	result = false;
+      }
     }
-    **************************** Performance ******************************** */
     
     return result;
 }
@@ -846,6 +831,10 @@ void WorkflowAppR2D::setUpForApplicationRun(QString &workingDir, QString &subDir
     
     statusMessage("Setup done. Now starting application.");
 
+    QJsonObject citations;
+    QString citeFile = templateDirectory + QDir::separator() + tr("please_cite.json");        
+    this->createCitation(citations, citeFile);
+    
     QApplication::processEvents();
 
     emit setUpForApplicationRunDone(tmpDirectory, inputFile);
@@ -1011,9 +1000,9 @@ void WorkflowAppR2D::loadResults(void)
 }
 
 int
-WorkflowAppR2D::createCitation(QJsonObject &citation) {
+WorkflowAppR2D::createCitation(QJsonObject &citation, QString citeFile) {
 
-  QString cit("{\"EE-UQ\": { \"citations\": [{\"citation\": \"Frank McKenna, Stevan Gavrilovic, Jinyan Zhao, Kuanshi Zhong, Adam Zsarnoczay, Barbaros Cetiner, Sang-ri Yi, Pedro Arduino, & Wael Elhaddad. (2024). NHERI-SimCenter/R2DTool: Version 4.1.0 (v4.1.0). Zenodo. https://doi.org/10.5281/zenodo.10902064\"},{\"citation\": \"Gregory G. Deierlein, Frank McKenna, Adam Zsarnóczay, Tracy Kijewski-Correa, Ahsan Kareem, Wael Elhaddad, Laura Lowes, Mat J. Schoettler, and Sanjay Govindjee (2020) A Cloud-Enabled Application Framework for Simulating Regional-Scale Impacts of Natural Hazards on the Built Environment. Frontiers in the Built Environment. 6:558706. doi: 10.3389\/fbuil.2020.558706\",\"description\": \" This marker paper describes the SimCenter application framework, which was designed to simulate the impacts of natural hazards on the built environment.It  is a necessary attribute for publishing work resulting from the use of SimCenter tools, software, and datasets.\"}]}}");
+  QString cit("{\"R2D\": { \"citations\": [{\"citation\": \"Frank McKenna, Stevan Gavrilovic, Jinyan Zhao, Kuanshi Zhong, Adam Zsarnoczay, Barbaros Cetiner, Sang-ri Yi, Aakash Bangalore Satish, Sina Naeimi, & Pedro Arduino. (2024). NHERI-SimCenter/R2DTool: Version 4.2.0 (v4.2.0). Zenodo. https://doi.org/10.5281/zenodo.11175489\",\"description\": \"This is the overall tool reference used to indicate the version of the tool.\"}},{\"citation\": \"Gregory G. Deierlein, Frank McKenna, Adam Zsarnóczay, Tracy Kijewski-Correa, Ahsan Kareem, Wael Elhaddad, Laura Lowes, Matthew J. Schoettler, and Sanjay Govindjee (2020) A Cloud-Enabled Application Framework for Simulating Regional-Scale Impacts of Natural Hazards on the Built Environment. Frontiers in the Built Environment. 6:558706. doi: 10.3389\/fbuil.2020.558706\",\"description\": \" This marker paper describes the SimCenter application framework, which was designed to simulate the impacts of natural hazards on the built environment.It  is a necessary attribute for publishing work resulting from the use of SimCenter tools, software, and datasets.\"}]}}");
 
   QJsonDocument docC = QJsonDocument::fromJson(cit.toUtf8());
   if(!docC.isNull()) {
@@ -1024,7 +1013,14 @@ WorkflowAppR2D::createCitation(QJsonObject &citation) {
     }
   }
 
-  /*
+  theAssetsWidget->outputCitation(citation);
+  theHazardsWidget->outputCitation(citation);
+  theModelingWidget->outputCitation(citation);
+  theAnalysisWidget->outputCitation(citation);
+  theDamageAndLossWidget->outputCitation(citation);
+  theUQWidget->outputCitation(citation);
+  theSystemPerformanceWidget->outputCitation(citation);
+
   QFile file(citeFile);
   if (!file.open(QFile::WriteOnly | QFile::Text)) {
     //errorMessage();
@@ -1034,13 +1030,6 @@ WorkflowAppR2D::createCitation(QJsonObject &citation) {
   QJsonDocument doc(citation);
   file.write(doc.toJson());
   file.close();
-
-  theSIM->outputCitation(citation);
-  theEventSelection->outputCitation(citation);
-  theAnalysisSelection->outputCitation(citation);
-  theUQ_Selection->outputCitation(citation);
-  theEDP_Selection->outputCitation(citation);
-  */
 
   
   return 0;    
